@@ -47,9 +47,9 @@ public class Demos {
 		System.out.println("\t  3. Descifrar archivo con DES");
 		System.out.println("Triple DES");
 		System.out
-				.println("\t  4. Generar clave para algoritmo de cifrado DES");
-		System.out.println("\t  5. Cifrar archivo con DES");
-		System.out.println("\t  6. Descifrar archivo con DES");
+				.println("\t  4. Generar clave para algoritmo de cifrado Triple DES");
+		System.out.println("\t  5. Cifrar archivo con Triple DES");
+		System.out.println("\t  6. Descifrar archivo con Triple DES");
 		System.out.println("AES");
 		System.out
 				.println("\t  7. Generar clave para algoritmo de cifrado AES");
@@ -85,6 +85,15 @@ public class Demos {
 				break;
 			case MENU_OPTION_DECRYPT_DES:
 				new DES().doDecrypt();
+				break;
+			case MENU_OPTION_GENERATE_TRIPLE_DES_KEY:
+				new TripleDES().doGenerateKey();
+				break;
+			case MENU_OPTION_ENCRYPT_TRIPLE_DES:
+				new TripleDES().doEncrypt();
+				break;
+			case MENU_OPTION_DECRYPT_TRIPLE_DES:
+				new TripleDES().doDecrypt();
 				break;
 			case MENU_OPTION_GENERATE_AES_KEY:
 				new AES().doGenerateKey();

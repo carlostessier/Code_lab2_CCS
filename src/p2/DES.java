@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.generators.DESKeyGenerator;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.modes.OFBBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.DESParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -21,6 +22,7 @@ public class DES {
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "encdes";
 	private static final String EXTENSION_KEY = "deskey";
+	private static final int BLOCK_SIZE = 64;
 	BlockCipher engine = new DESEngine();
 
 	/**
@@ -88,8 +90,11 @@ public class DES {
 	 */
 	protected byte[] encrypt(byte[] key, byte[] ptBytes) {
 		// Creamos un cifrador de Bloque con Padding y con el modo de bloque CBC
+		//BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+		//		new CBCBlockCipher(engine));
 		BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-				new CBCBlockCipher(engine));
+			new OFBBlockCipher(engine,BLOCK_SIZE));
+		
 		// Lo inicializamos con la clave
 		cipher.init(true, new KeyParameter(key));
 		// Reservamos espacio para el texto cifrado
@@ -117,8 +122,10 @@ public class DES {
 	 */
 	public byte[] decrypt(byte[] key, byte[] cipherText) {
 		// Creamos un cifrador de Bloque con Padding y con el modo de bloque CBC
+		//BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+		//		new CBCBlockCipher(engine));
 		BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
-				new CBCBlockCipher(engine));
+				new OFBBlockCipher(engine,BLOCK_SIZE));
 		// Lo inicializamos con la clave
 		cipher.init(false, new KeyParameter(key));
 		// Reservamos espacio para el texto descifrado

@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.DESEngine;
+import org.bouncycastle.crypto.engines.DESedeEngine;
 import org.bouncycastle.crypto.generators.DESKeyGenerator;
 import org.bouncycastle.crypto.generators.DESedeKeyGenerator;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
@@ -23,7 +24,7 @@ public class TripleDES {
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "tripleencdes";
 	private static final String EXTENSION_KEY = "tripledeskey";
-	BlockCipher engine = new DESEngine();
+	BlockCipher engine = new DESedeEngine();
 
 	/**
 	 * Gestiona la creación de una clave Triple DES
