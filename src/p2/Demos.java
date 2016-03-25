@@ -2,9 +2,10 @@ package p2;
 
 import java.util.Scanner;
 
-import org.bouncycastle.util.encoders.Hex;
 
 public class Demos {
+	
+	static Scanner scanner;
 
 	public static void main(String[] args) {
 		Demos instance = new Demos();
@@ -18,14 +19,17 @@ public class Demos {
 	protected final int MENU_OPTION_GENERATE_DES_KEY = 1;
 	protected final int MENU_OPTION_ENCRYPT_DES = 2;
 	protected final int MENU_OPTION_DECRYPT_DES = 3;
-	protected final int MENU_OPTION_GENERATE_AES_KEY = 4;
-	protected final int MENU_OPTION_ENCRYPT_AES = 5;
-	protected final int MENU_OPTION_DECRYPT_AES = 6;
-	protected final int MENU_OPTION_CREATE_MD5 = 7;
-	protected final int MENU_OPTION_CREATE_SHA1 = 8;
-	protected final int MENU_OPTION_GENERATE_RSA_KEYS = 9;
-	protected final int MENU_OPTION_ENCRYPT_RSA = 10;
-	protected final int MENU_OPTION_DECRYPT_RSA = 11;
+	protected final int MENU_OPTION_GENERATE_TRIPLE_DES_KEY = 4;
+	protected final int MENU_OPTION_ENCRYPT_TRIPLE_DES = 5;
+	protected final int MENU_OPTION_DECRYPT_TRIPLE_DES =6;
+	protected final int MENU_OPTION_GENERATE_AES_KEY = 7;
+	protected final int MENU_OPTION_ENCRYPT_AES = 8;
+	protected final int MENU_OPTION_DECRYPT_AES = 9;
+	protected final int MENU_OPTION_CREATE_MD5 = 10;
+	protected final int MENU_OPTION_CREATE_SHA1 = 11;
+	protected final int MENU_OPTION_GENERATE_RSA_KEYS = 12;
+	protected final int MENU_OPTION_ENCRYPT_RSA = 13;
+	protected final int MENU_OPTION_DECRYPT_RSA = 14;
 	
 	/**
 	 * Muestra el menú y gestiona las solicitudes de cada una de sus opciones
@@ -41,21 +45,26 @@ public class Demos {
 				.println("\t  1. Generar clave para algoritmo de cifrado DES");
 		System.out.println("\t  2. Cifrar archivo con DES");
 		System.out.println("\t  3. Descifrar archivo con DES");
+		System.out.println("Triple DES");
+		System.out
+				.println("\t  4. Generar clave para algoritmo de cifrado DES");
+		System.out.println("\t  5. Cifrar archivo con DES");
+		System.out.println("\t  6. Descifrar archivo con DES");
 		System.out.println("AES");
 		System.out
-				.println("\t  4. Generar clave para algoritmo de cifrado AES");
-		System.out.println("\t  5. Cifrar archivo con AES");
-		System.out.println("\t  6. Descifrar archivo con AES");
+				.println("\t  7. Generar clave para algoritmo de cifrado AES");
+		System.out.println("\t  8. Cifrar archivo con AES");
+		System.out.println("\t  9. Descifrar archivo con AES");
 		System.out.println("FUNCIONES RESUMEN");
-		System.out.println("\t  7. Generar resumen MD5 de un archivo");
-		System.out.println("\t  8. Generar resumen SHA1 de un archivo");
+		System.out.println("\t  10. Generar resumen MD5 de un archivo");
+		System.out.println("\t  11. Generar resumen SHA1 de un archivo");
 		System.out.println("RSA");
-		System.out.println("\t  9. Generar par de claves RSA");
-		System.out.println("\t 10. Cifrar archivo con RSA");
-		System.out.println("\t 11. Descifrar archivo con RSA");
+		System.out.println("\t  12. Generar par de claves RSA");
+		System.out.println("\t 13. Cifrar archivo con RSA");
+		System.out.println("\t 14. Descifrar archivo con RSA");
 		System.out.println("\n q. Terminar ejecución");
 		System.out.print("\n\nSeleccione una opción y pulse ENTER:");
-		Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 		String selectedOption = scanner.nextLine();
 
 		if (!selectedOption.matches("-?\\d+?") && !selectedOption.equals("q")) {

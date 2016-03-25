@@ -8,23 +8,25 @@ import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.generators.DESKeyGenerator;
+import org.bouncycastle.crypto.generators.DESedeKeyGenerator;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.DESParameters;
+import org.bouncycastle.crypto.params.DESedeParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
  * Demostración de cifrado DES con Bouncy Castle
 */
-public class DES {
+public class TripleDES {
 	private static final int BYTE = 8;
-	private static final String EXTENSION_ENCRYPT_FILE = "encdes";
-	private static final String EXTENSION_KEY = "deskey";
+	private static final String EXTENSION_ENCRYPT_FILE = "tripleencdes";
+	private static final String EXTENSION_KEY = "tripledeskey";
 	BlockCipher engine = new DESEngine();
 
 	/**
-	 * Gestiona la creación de una clave DES
+	 * Gestiona la creación de una clave Triple DES
 	 */
 	public void doGenerateKey() {
 		byte[] key = generateKey();
@@ -35,7 +37,7 @@ public class DES {
 	}
 
 	/**
-	 * Gestiona el cifrado de un archivo usando el algoritmo DES y una clave alamcenada también en otro archivo
+	 * Gestiona el cifrado de un archivo usando el algoritmo Triple DES y una clave alamcenada también en otro archivo
 	 */
 	public void doEncrypt() {
 		// Archivo a cifrar
@@ -57,7 +59,7 @@ public class DES {
 
 	}
 	/**
-	 * Gestiona el descifrado de un archivo usando el algoritmo DES y una clave almacenada también en otro archivo
+	 * Gestiona el descifrado de un archivo usando el algoritmo Triple DES y una clave almacenada también en otro archivo
 	 */
 	public void doDecrypt() {
 		// Archivo a descifrar
@@ -81,7 +83,7 @@ public class DES {
 	}
 
 	/**
-	 * Realiza el cifrado DES de los datos
+	 * Realiza el cifrado Triple DES de los datos
 	 * @param key Clave
 	 * @param ptBytes Texto a cifrar
 	 * @return Texto cifrado
@@ -108,7 +110,7 @@ public class DES {
 	}
 
 	/**
-	 * Realiza el descifrado DES de los datos
+	 * Realiza el descifrado Triple DES de los datos
 	 * Este método podría obviarse y utilizarse el método encrypt para realizar el descifrado al ser
 	 * el algoritmo DES un algoritmo simétrico, pero se mantiene por criterios de claridad para el alumno
 	 * @param key Clave
@@ -138,7 +140,7 @@ public class DES {
 	}
 
 	/**
-	 * Genera una Clave para el cifrado DES a partir de un número aleatorio
+	 * Genera una Clave para el cifrado Triple DES a partir de un número aleatorio
 	 * "seguro"
 	 * 
 	 * @return Clave generada con la longitud de DESParameters
@@ -157,9 +159,9 @@ public class DES {
 		
 		// Generamos la clave DES con la longitud necesaria para el algoritmo
 		KeyGenerationParameters kgp = new KeyGenerationParameters(sr,
-				(DESParameters.DES_KEY_LENGTH) * BYTE);
+				(DESedeParameters.DES_EDE_KEY_LENGTH) * BYTE);
 
-		DESKeyGenerator kg = new DESKeyGenerator();
+		DESedeKeyGenerator kg = new DESedeKeyGenerator();
 		kg.init(kgp);
 
 		/*
