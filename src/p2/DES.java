@@ -18,6 +18,7 @@ import org.bouncycastle.util.encoders.Hex;
  * Demostración de cifrado DES con Bouncy Castle
 */
 public class DES {
+	private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
 	private static final int BYTE = 8;
@@ -107,7 +108,7 @@ public class DES {
 			cipher.doFinal(rv, tam);
 		} catch (Exception ce) {
 			System.err
-			.println("Ha ocurrido un error al intentar "+(decrypt?"cifrar":"descifrar")+" el texto:"
+			.println("Ha ocurrido un error al intentar "+(decrypt?"cifrar":"descifrar")+" el texto:\n"
 					+ ce);
 			return null;
 		}
@@ -188,7 +189,8 @@ public class DES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
-			sr.setSeed("UCTresM.".getBytes());
+			// por seguridad no introducimos semilla
+			//sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err
 					.println("Ha ocurrido un error generando el número aleatorio");
@@ -200,6 +202,7 @@ public class DES {
 				(DESParameters.DES_KEY_LENGTH) * BYTE);
 
 		DESKeyGenerator kg = new DESKeyGenerator();
+		
 		kg.init(kgp);
 
 		/*

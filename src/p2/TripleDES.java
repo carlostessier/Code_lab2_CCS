@@ -21,6 +21,7 @@ import org.bouncycastle.util.encoders.Hex;
  * Demostración de cifrado DES con Bouncy Castle
 */
 public class TripleDES {
+	private static final String SEED = "UCTresM.";
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "tripleencdes";
 	private static final String EXTENSION_KEY = "tripledeskey";
@@ -151,7 +152,7 @@ public class TripleDES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
-			sr.setSeed("UCTresM.".getBytes());
+			//sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err
 					.println("Ha ocurrido un error generando el número aleatorio");

@@ -3,6 +3,7 @@ package p2;
 import org.bouncycastle.crypto.digests.GeneralDigest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
+import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -23,6 +24,13 @@ public class Hash {
 	public void doSHA1() {
 		doDigest(new SHA1Digest());
 	}
+	
+	/**
+	 * Establece la función resumen SHA256 para el procesamiento
+	 */
+	public void doSHA256() {
+		doDigest(new SHA256Digest());
+	}
 
 	/**
 	 * Gestiona un digest de un archivo
@@ -39,6 +47,8 @@ public class Hash {
 		}
 		return null;
 	}
+	
+	
 
 	/**
 	 * Realiza el procesamiento de la función resumen seleccionada

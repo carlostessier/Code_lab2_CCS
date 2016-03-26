@@ -268,7 +268,7 @@ public class AES {
 		try {
 			sr = new SecureRandom();
 			// Lo inicializamos con una semilla
-			sr.setSeed(SEED.getBytes());
+			//sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err
 					.println("Ha ocurrido un error generando el número aleatorio");
