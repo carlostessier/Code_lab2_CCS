@@ -8,7 +8,6 @@ import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.generators.DESKeyGenerator;
-import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.DESParameters;
@@ -19,6 +18,8 @@ import org.bouncycastle.util.encoders.Hex;
  * Demostración de cifrado DES con Bouncy Castle
 */
 public class DES {
+	private static final boolean ENCRYPT = true;
+	private static final boolean DECRYPT = false;
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "encdes";
 	private static final String EXTENSION_KEY = "deskey";
@@ -48,7 +49,7 @@ public class DES {
 					EXTENSION_KEY);
 			if (key != null) {
 				// La almacenamos en hexadecimal para que sea legible en el archivo
-				byte[] res = encrypt(Hex.decode(key),text);
+				byte[] res = des(Hex.decode(key),text,DES.ENCRYPT);
 				System.out.println("Texto cifrado (en hexadecimal):"
 						+ new String(Hex.encode(res)));
 				Utils.instance().saveFile(EXTENSION_ENCRYPT_FILE, Hex.encode(res));
@@ -73,13 +74,45 @@ public class DES {
 				EXTENSION_KEY);
 		if (key != null) {
 			// Desciframos el archivo
-			byte[] res = decrypt(Hex.decode(key), Hex.decode(fileContent));
+			byte[] res = des(Hex.decode(key), Hex.decode(fileContent),DES.DECRYPT);
 			if (res != null) {
 				System.out.println("Texto en claro:"
 						+ new String(res));
 			}
 		}
 
+	}
+	
+	/**
+	 * Realiza el cifrado DES de los datos
+	 * @param key Clave
+	 * @param ptBytes Texto a cifrar
+	 * @return Texto cifrado
+	 */
+	protected byte[] des(byte[] key, byte[] ptBytes, boolean decrypt) {
+		// Creamos un cifrador de Bloque con Padding y con el modo de bloque CBC
+		//BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+		//		new CBCBlockCipher(engine));
+		BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+			new OFBBlockCipher(engine,BLOCK_SIZE));
+		
+		// Lo inicializamos con la clave
+		cipher.init(decrypt, new KeyParameter(key));
+		// Reservamos espacio para el texto cifrado
+		byte[] rv = new byte[cipher.getOutputSize(ptBytes.length)];
+		// Realizamos el procesamiento con DES
+		int tam = cipher.processBytes(ptBytes, 0, ptBytes.length, rv, 0);
+		try {
+			// "flush" del cifrador
+			cipher.doFinal(rv, tam);
+		} catch (Exception ce) {
+			System.err
+			.println("Ha ocurrido un error al intentar "+(decrypt?"cifrar":"descifrar")+" el texto:"
+					+ ce);
+			return null;
+		}
+		// Devolvemos los datos cifrados
+		return rv;
 	}
 
 	/**
@@ -96,7 +129,7 @@ public class DES {
 			new OFBBlockCipher(engine,BLOCK_SIZE));
 		
 		// Lo inicializamos con la clave
-		cipher.init(true, new KeyParameter(key));
+		cipher.init(ENCRYPT, new KeyParameter(key));
 		// Reservamos espacio para el texto cifrado
 		byte[] rv = new byte[cipher.getOutputSize(ptBytes.length)];
 		// Realizamos el procesamiento con DES
@@ -127,7 +160,7 @@ public class DES {
 		BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
 				new OFBBlockCipher(engine,BLOCK_SIZE));
 		// Lo inicializamos con la clave
-		cipher.init(false, new KeyParameter(key));
+		cipher.init(DECRYPT, new KeyParameter(key));
 		// Reservamos espacio para el texto descifrado
 		byte[] rv = new byte[cipher.getOutputSize(cipherText.length)];
 		// Realizamos el procesamiento con DES
