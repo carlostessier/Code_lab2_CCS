@@ -18,7 +18,7 @@ import org.bouncycastle.util.encoders.Hex;
  * Demostración de cifrado DES con Bouncy Castle
 */
 public class DES {
-	private static final String SEED = "UCTresM.";
+	//private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
 	private static final int BYTE = 8;

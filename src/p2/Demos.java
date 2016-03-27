@@ -9,6 +9,7 @@ public class Demos {
 
 	public static void main(String[] args) {
 		Demos instance = new Demos();
+		scanner = new Scanner(System.in);
 		instance.doMenu();
 	}
 
@@ -64,7 +65,6 @@ public class Demos {
 		System.out.println("\t 14. Descifrar archivo con RSA");
 		System.out.println("\n q. Terminar ejecución");
 		System.out.print("\n\nSeleccione una opción y pulse ENTER:");
-			scanner = new Scanner(System.in);
 		String selectedOption = scanner.nextLine();
 
 		if (!selectedOption.matches("-?\\d+?") && !selectedOption.equals("q")) {

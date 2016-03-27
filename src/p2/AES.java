@@ -1,8 +1,6 @@
 package p2;
 
 import java.security.SecureRandom;
-import java.util.Base64;
-
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -23,7 +21,7 @@ import org.bouncycastle.util.encoders.Hex;
  *
  */
 public class AES {
-	private static final String SEED = "UCTresM.";
+	//private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
 	private static final int BLOCK_SIZE = 16;
@@ -181,6 +179,7 @@ public class AES {
 	 *            Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos descifrados
 	 */
+	@SuppressWarnings("unused")
 	private static byte[] decrypt(byte[] ciphered, byte[] key, byte[] iv) {
 		try {
 			// Creamos el cifrador
@@ -212,6 +211,7 @@ public class AES {
 	 *            Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos cifrados
 	 */
+	@SuppressWarnings("unused")
 	private static byte[] encrypt(byte[] plain, byte[] key, byte[] iv) {
 		try {
 			PaddedBufferedBlockCipher aes = new PaddedBufferedBlockCipher(
@@ -239,6 +239,7 @@ public class AES {
 	 *            Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos cifrados
 	 */
+	@SuppressWarnings("unused")
 	private static byte[] aes(byte[] input, byte[] key, byte[] iv, boolean decrypt) {
 		try {
 			PaddedBufferedBlockCipher aes = new PaddedBufferedBlockCipher(
@@ -267,7 +268,7 @@ public class AES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
-			// Lo inicializamos con una semilla
+			// por seguridad no lo inicializamos con una semilla
 			//sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err

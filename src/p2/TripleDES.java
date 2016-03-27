@@ -6,13 +6,10 @@ import java.security.SecureRandom;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.KeyGenerationParameters;
-import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.engines.DESedeEngine;
-import org.bouncycastle.crypto.generators.DESKeyGenerator;
 import org.bouncycastle.crypto.generators.DESedeKeyGenerator;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
-import org.bouncycastle.crypto.params.DESParameters;
 import org.bouncycastle.crypto.params.DESedeParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Hex;
@@ -21,7 +18,7 @@ import org.bouncycastle.util.encoders.Hex;
  * Demostración de cifrado DES con Bouncy Castle
 */
 public class TripleDES {
-	private static final String SEED = "UCTresM.";
+	//private static final String SEED = "UCTresM.";
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "tripleencdes";
 	private static final String EXTENSION_KEY = "tripledeskey";
@@ -152,6 +149,7 @@ public class TripleDES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
+			// por seguridad no introducimos semilla
 			//sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err
