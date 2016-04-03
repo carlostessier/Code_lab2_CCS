@@ -21,13 +21,13 @@ import org.bouncycastle.util.encoders.Hex;
  *
  */
 public class AES {
-	//private static final String SEED = "UCTresM.";
+	private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
-	private static final int BLOCK_SIZE = 16;
-	private static final int BLOCK_SIZE_RJINDAEL = 256;
-	private static final int BLOCK_IV_SIZE = 10;
 	private static final int KEY_SIZE = 24;
+	private static final int BLOCK_SIZE_RJINDAEL = 128; //128, 192 o 256 bits
+	private static final int BLOCK_SIZE = 16;
+	private static final int BLOCK_IV_SIZE = KEY_SIZE;//128;
 	private static final String EXTENSION_CYPHER_TEXT = "encaes";
 	private static final String EXTENSION_PLAIN_TEXT = "txt";
 	private static final String EXTENSION_KEY = "aeskeyiv";
@@ -62,7 +62,7 @@ public class AES {
 			byte[] key = Utils.instance().doSelectFile("Seleccione una clave",
 					EXTENSION_KEY);
 			if (key != null) {
-				byte[] res = rjindael(text,
+				byte[] res = aes(text,
 						Arrays.copyOfRange(Hex.decode(key), 0, KEY_SIZE),
 						Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, KEY_SIZE + BLOCK_SIZE),AES.ENCRYPT);
 				System.out.println("Texto cifrado (en hexadecimal):"
@@ -88,7 +88,7 @@ public class AES {
 		byte[] key = Utils.instance().doSelectFile("Seleccione una clave",
 				EXTENSION_KEY);
 		if (key != null) {			
-			byte[] res = rjindael(Hex.decode(fileContent),
+			byte[] res = aes(Hex.decode(fileContent),
 					Arrays.copyOfRange(Hex.decode(key), 0, KEY_SIZE),
 					Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, BLOCK_SIZE + KEY_SIZE),AES.DECRYPT);
 					
@@ -103,10 +103,8 @@ public class AES {
 	 * Cifra/Descifra datos con el algoritmo AES. Al ser un algoritmo de cifrado
 	 * simétrico se puede usar para ambos procesos
 	 * 
-	 * @param cipher
-	 *            Cifrador/Descifrador AES
-	 * @param data
-	 *            Datos origen
+	 * @param cipher  Cifrador/Descifrador AES
+	 * @param data Datos origen
 	 * @return Datos destino
 	 * @throws Exception
 	 */
@@ -128,11 +126,13 @@ public class AES {
 
 	/**
 	 * Gestiona el cifrado de un archivo txt mediante Rjindael con tamaño de bloque 256
-	 * 
-	 * @param ciphered
-	 * @param key
-	 * @param iv
-	 * @return
+	 * 	 
+	 * @param ciphered Datos cifrados
+	 * @param key Clave (128, 256 bytes) 
+	 * @param iv Vector de Inicialización (Tamaño en bytes del bloque)
+	 * @param decrypt true para descifrar, false para cifrar
+	 * @return Datos cifrados/descifrados
+	 * @return Datos cifrados/descifrados
 	 */
 	private static byte[] rjindael(byte[] input, byte[] key, byte[] iv, boolean decrypt) {
 		BlockCipher engine = new RijndaelEngine(BLOCK_SIZE_RJINDAEL);
@@ -171,12 +171,9 @@ public class AES {
 	 * Tanto el método de cifrado como el de descifrado se pueden realizar como uno sólo, 
 	 * pero se mantienen separados por claridad del código para el alumno
 	 * 
-	 * @param ciphered
-	 *            Datos cifrados
-	 * @param key
-	 *            Clave (24 bytes) 
-	 * @param iv
-	 *            Vector de Inicialización (Tamaño en bytes del bloque)
+	 * @param ciphered Datos cifrados
+	 * @param key Clave (24 bytes) 
+	 * @param iv Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos descifrados
 	 */
 	@SuppressWarnings("unused")
@@ -203,12 +200,9 @@ public class AES {
 	/**
 	 * Cifra datos usando el algoritmo AES
 	 * 
-	 * @param datos
-	 *            a cifrar
-	 * @param key
-	 *            Clave (24 bytes)
-	 * @param iv
-	 *            Vector de Inicialización (Tamaño en bytes del bloque)
+	 * @param datos a cifrar
+	 * @param key Clave (24 bytes)
+	 * @param iv Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos cifrados
 	 */
 	@SuppressWarnings("unused")
@@ -231,12 +225,9 @@ public class AES {
 	/**
 	 * Cifra o Descifra datos usando el algoritmo AES
 	 * 
-	 * @param datos
-	 *            a cifrar
-	 * @param key
-	 *            Clave (24 bytes)
-	 * @param iv
-	 *            Vector de Inicialización (Tamaño en bytes del bloque)
+	 * @param datosa cifrar
+	 * @param key Clave (24 bytes)
+	 * @param iv Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos cifrados
 	 */
 	@SuppressWarnings("unused")
@@ -268,15 +259,15 @@ public class AES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
-			// por seguridad no lo inicializamos con una semilla
-			//sr.setSeed(SEED.getBytes());
+			// por seguridad no debería inicializarse con una semilla
+			sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
 			System.err
 					.println("Ha ocurrido un error generando el número aleatorio");
 			return null;
 		}
 		// Lo generamos del tamaño que necesitamos (24 bytes de clave + tamaño de bloque como IV)
-		byte[] key = sr.generateSeed(KEY_SIZE + BLOCK_SIZE + BLOCK_IV_SIZE);
+		byte[] key = sr.generateSeed(KEY_SIZE + BLOCK_IV_SIZE );
 		return key;
 
 	}

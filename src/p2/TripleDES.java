@@ -22,6 +22,7 @@ public class TripleDES {
 	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "tripleencdes";
 	private static final String EXTENSION_KEY = "tripledeskey";
+	
 	BlockCipher engine = new DESedeEngine();
 
 	/**

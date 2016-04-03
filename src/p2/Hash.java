@@ -4,6 +4,7 @@ import org.bouncycastle.crypto.digests.GeneralDigest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
@@ -28,8 +29,24 @@ public class Hash {
 	/**
 	 * Establece la función resumen SHA256 para el procesamiento
 	 */
-	public void doSHA256() {
-		doDigest(new SHA256Digest());
+	public void doSHA512() {
+		doDigest(new SHA512Digest());
+	}
+	
+	/**
+	 * Gestiona un digest de un archivo
+	 * @param digest
+	 * @return
+	 */
+	protected byte[] doDigest(SHA512Digest digest) {
+		byte[] fileContent = Utils.instance().doSelectFile(
+				"Seleccione un archivo", "txt");
+		if (fileContent != null) {
+			byte[] result = digest(digest, fileContent);
+			System.out.println("El resumen es:" + new String(Hex.encode(result)));
+			return result;
+		}
+		return null;
 	}
 
 	/**
@@ -50,6 +67,21 @@ public class Hash {
 	
 	
 
+	/**
+	 * Realiza el procesamiento de la función resumen seleccionada
+	 * @param digest
+	 * @param input
+	 * @return
+	 */
+	public byte[] digest(SHA512Digest digest, byte[] input) {
+		digest.update(input, 0, input.length);
+
+		// get the output/ digest size and hash it
+		byte[] result = new byte[digest.getDigestSize()];
+		digest.doFinal(result, 0);
+		return result;
+	}
+	
 	/**
 	 * Realiza el procesamiento de la función resumen seleccionada
 	 * @param digest
