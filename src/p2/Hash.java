@@ -1,9 +1,9 @@
 package p2;
 
 import org.bouncycastle.crypto.digests.GeneralDigest;
+import org.bouncycastle.crypto.digests.LongDigest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
-import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -38,7 +38,7 @@ public class Hash {
 	 * @param digest
 	 * @return
 	 */
-	protected byte[] doDigest(SHA512Digest digest) {
+	protected byte[] doDigest(LongDigest digest) {
 		byte[] fileContent = Utils.instance().doSelectFile(
 				"Seleccione un archivo", "txt");
 		if (fileContent != null) {
@@ -68,12 +68,12 @@ public class Hash {
 	
 
 	/**
-	 * Realiza el procesamiento de la funciÃ³n resumen seleccionada
+	 * Realiza el procesamiento de la función resumen seleccionada
 	 * @param digest
 	 * @param input
 	 * @return
 	 */
-	public byte[] digest(SHA512Digest digest, byte[] input) {
+	public byte[] digest(LongDigest digest, byte[] input) {
 		digest.update(input, 0, input.length);
 
 		// get the output/ digest size and hash it

@@ -20,7 +20,7 @@ import org.bouncycastle.util.encoders.Hex;
 public class RSA {
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
-	private static final int KEY_LENGTH = 1024;// 1528 2048
+	private static final int KEY_LENGTH = 1;// 1024 1528 2048
 	private static final String FILE_EXTENSION_PLAINTEXT = "txt";
 	private static final String ALGORITHM = "RSA";
 	private static final String FILE_EXTENSION_PRIVATE_KEY = "priv";
@@ -133,7 +133,7 @@ public class RSA {
 	}
 
 	private byte[] rsa(byte[] inputData, byte[] keyBytes, boolean decrypt) {
-
+//..
 		try {
 			
 			AsymmetricKeyParameter Key = (decrypt?

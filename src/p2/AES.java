@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.engines.RijndaelEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.modes.OFBBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -24,10 +25,10 @@ public class AES {
 	private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
-	private static final int KEY_SIZE = 24;
-	private static final int BLOCK_SIZE_RJINDAEL = 128; //128, 192 o 256 bits
+	private static final int KEY_SIZE = 24; // 16, 24 o 32
 	private static final int BLOCK_SIZE = 16;
-	private static final int BLOCK_IV_SIZE = KEY_SIZE;//128;
+	private static final int BLOCK_SIZE_RJINDAEL = BLOCK_SIZE*Byte.SIZE; //128, 192 o 256 bits
+	private static final int BLOCK_IV_SIZE = BLOCK_SIZE; // debe tener el mismo tamaño que el bloque
 	private static final String EXTENSION_CYPHER_TEXT = "encaes";
 	private static final String EXTENSION_PLAIN_TEXT = "txt";
 	private static final String EXTENSION_KEY = "aeskeyiv";
@@ -64,7 +65,7 @@ public class AES {
 			if (key != null) {
 				byte[] res = aes(text,
 						Arrays.copyOfRange(Hex.decode(key), 0, KEY_SIZE),
-						Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, KEY_SIZE + BLOCK_SIZE),AES.ENCRYPT);
+						Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, KEY_SIZE + BLOCK_IV_SIZE),AES.ENCRYPT);
 				System.out.println("Texto cifrado (en hexadecimal):"
 						+ new String(Hex.encode(res)));
 				Utils.instance().saveFile(EXTENSION_CYPHER_TEXT, Hex.encode(res));
@@ -90,7 +91,7 @@ public class AES {
 		if (key != null) {			
 			byte[] res = aes(Hex.decode(fileContent),
 					Arrays.copyOfRange(Hex.decode(key), 0, KEY_SIZE),
-					Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, BLOCK_SIZE + KEY_SIZE),AES.DECRYPT);
+					Arrays.copyOfRange(Hex.decode(key), KEY_SIZE, BLOCK_IV_SIZE + KEY_SIZE),AES.DECRYPT);
 					
 			if (res != null) {
 				System.out.println("Texto en claro:" + new String(res));
@@ -134,6 +135,7 @@ public class AES {
 	 * @return Datos cifrados/descifrados
 	 * @return Datos cifrados/descifrados
 	 */
+	@SuppressWarnings("unused")
 	private static byte[] rjindael(byte[] input, byte[] key, byte[] iv, boolean decrypt) {
 		BlockCipher engine = new RijndaelEngine(BLOCK_SIZE_RJINDAEL);
 		BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine), 
@@ -230,11 +232,10 @@ public class AES {
 	 * @param iv Vector de Inicialización (Tamaño en bytes del bloque)
 	 * @return Datos cifrados
 	 */
-	@SuppressWarnings("unused")
 	private static byte[] aes(byte[] input, byte[] key, byte[] iv, boolean decrypt) {
 		try {
 			PaddedBufferedBlockCipher aes = new PaddedBufferedBlockCipher(
-					new CBCBlockCipher(new AESEngine()));
+					new OFBBlockCipher(new AESEngine(),64));
 			CipherParameters ivAndKey = new ParametersWithIV(new KeyParameter(
 					key), iv);
 			aes.init(decrypt, ivAndKey);

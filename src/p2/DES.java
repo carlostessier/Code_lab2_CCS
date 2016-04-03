@@ -23,7 +23,6 @@ public class DES {
 	private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
-	private static final int BYTE = 8;
 	private static final String EXTENSION_ENCRYPT_FILE = "encdes";
 	private static final String EXTENSION_KEY = "deskey";
 	private static final int BLOCK_SIZE = 64;
@@ -53,7 +52,7 @@ public class DES {
 			if (key != null) {
 				// La almacenamos en hexadecimal para que sea legible en el
 				// archivo
-				byte[] res = des(Hex.decode(key), text, DES.ENCRYPT, DES.OFB_MODE);
+				byte[] res = des(Hex.decode(key), text, DES.ENCRYPT, DES.CBC_MODE);
 				System.out.println("Texto cifrado (en hexadecimal):" + new String(Hex.encode(res)));
 				Utils.instance().saveFile(EXTENSION_ENCRYPT_FILE, Hex.encode(res));
 			}
@@ -77,7 +76,7 @@ public class DES {
 		byte[] key = Utils.instance().doSelectFile("Seleccione una clave", "."+EXTENSION_KEY);
 		if (key != null) {
 			// Desciframos el archivo
-			byte[] res = des(Hex.decode(key), Hex.decode(fileContent), DES.DECRYPT, DES.OFB_MODE);
+			byte[] res = des(Hex.decode(key), Hex.decode(fileContent), DES.DECRYPT, DES.CBC_MODE);
 			if (res != null) {
 				System.out.println("Texto en claro:" + new String(res));
 			}
@@ -113,9 +112,12 @@ public class DES {
 		switch (mode) {
 		case CBC_MODE:
 			cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
+			System.out.println("descifrando en CBC Mode");
 			break;
 		case OFB_MODE:
 			cipher = new PaddedBufferedBlockCipher(new OFBBlockCipher(engine, BLOCK_SIZE));
+			System.out.println("descifrando en OFB Mode");
+			break;
 		default:
 			cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
 			break;
@@ -214,12 +216,12 @@ public class DES {
 			// por seguridad no debería utilizarse semilla
 			sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
-			System.err.println("Ha ocurrido un error generando el nÃºmero aleatorio");
+			System.err.println("Ha ocurrido un error generando el número aleatorio");
 			return null;
 		}
 
 		// Generamos la clave DES con la longitud necesaria para el algoritmo
-		KeyGenerationParameters kgp = new KeyGenerationParameters(sr, (DESParameters.DES_KEY_LENGTH) * BYTE);
+		KeyGenerationParameters kgp = new KeyGenerationParameters(sr, (DESParameters.DES_KEY_LENGTH) * Byte.SIZE);
 
 		DESKeyGenerator kg = new DESKeyGenerator();
 
