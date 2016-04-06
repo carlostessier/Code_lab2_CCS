@@ -68,7 +68,7 @@ public class Hash {
 	
 
 	/**
-	 * Realiza el procesamiento de la función resumen seleccionada
+	 * Realiza el procesamiento de la funciÃ³n resumen seleccionada
 	 * @param digest
 	 * @param input
 	 * @return

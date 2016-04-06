@@ -15,7 +15,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Hex;
 
 /**
- * Demostración de cifrado DES con Bouncy Castle
+ * DemostraciÃ³n de cifrado DES con Bouncy Castle
  */
 public class DES {
 	private static final String OFB_MODE = "OFB";
@@ -29,7 +29,7 @@ public class DES {
 	BlockCipher engine = new DESEngine();
 
 	/**
-	 * Gestiona la creación de una clave DES
+	 * Gestiona la creaciÃ³n de una clave DES
 	 */
 	public void doGenerateKey() {
 		byte[] key = generateKey();
@@ -64,7 +64,7 @@ public class DES {
 
 	/**
 	 * Gestiona el descifrado de un archivo usando el algoritmo DES y una clave
-	 * almacenada también en otro archivo
+	 * almacenada tambiÃ© en otro archivo
 	 */
 	public void doDecrypt() {
 		// Archivo a descifrar
@@ -213,10 +213,10 @@ public class DES {
 		SecureRandom sr = null;
 		try {
 			sr = new SecureRandom();
-			// por seguridad no debería utilizarse semilla
+			// por seguridad no deberï¿½a utilizarse semilla
 			sr.setSeed(SEED.getBytes());
 		} catch (Exception e) {
-			System.err.println("Ha ocurrido un error generando el número aleatorio");
+			System.err.println("Ha ocurrido un error generando el nï¿½mero aleatorio");
 			return null;
 		}
 
