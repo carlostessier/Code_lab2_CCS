@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.generators.DESKeyGenerator;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.modes.CFBBlockCipher;
 import org.bouncycastle.crypto.modes.OFBBlockCipher;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.DESParameters;
@@ -20,6 +21,7 @@ import org.bouncycastle.util.encoders.Hex;
 public class DES {
 	private static final String OFB_MODE = "OFB";
 	private static final String CBC_MODE = "CBC";
+	private static final String CFB_MODE = "CFB";
 	private static final String SEED = "UCTresM.";
 	private static final boolean ENCRYPT = true;
 	private static final boolean DECRYPT = false;
@@ -52,7 +54,7 @@ public class DES {
 			if (key != null) {
 				// La almacenamos en hexadecimal para que sea legible en el
 				// archivo
-				byte[] res = des(Hex.decode(key), text, DES.ENCRYPT, DES.CBC_MODE);
+				byte[] res = des(Hex.decode(key), text, DES.ENCRYPT, DES.CFB_MODE);
 				System.out.println("Texto cifrado (en hexadecimal):" + new String(Hex.encode(res)));
 				Utils.instance().saveFile(EXTENSION_ENCRYPT_FILE, Hex.encode(res));
 			}
@@ -76,7 +78,8 @@ public class DES {
 		byte[] key = Utils.instance().doSelectFile("Seleccione una clave", "."+EXTENSION_KEY);
 		if (key != null) {
 			// Desciframos el archivo
-			byte[] res = des(Hex.decode(key), Hex.decode(fileContent), DES.DECRYPT, DES.CBC_MODE);
+			byte[] res = des(Hex.decode(key), Hex.decode(fileContent), DES.DECRYPT
+			, DES.CFB_MODE);
 			if (res != null) {
 				System.out.println("Texto en claro:" + new String(res));
 			}
@@ -116,6 +119,10 @@ public class DES {
 			break;
 		case OFB_MODE:
 			cipher = new PaddedBufferedBlockCipher(new OFBBlockCipher(engine, BLOCK_SIZE));
+			System.out.println("descifrando en OFB Mode");
+			break;
+		case CFB_MODE:
+			cipher = new PaddedBufferedBlockCipher(new CFBBlockCipher(engine, BLOCK_SIZE));
 			System.out.println("descifrando en OFB Mode");
 			break;
 		default:
@@ -221,7 +228,8 @@ public class DES {
 		}
 
 		// Generamos la clave DES con la longitud necesaria para el algoritmo
-		KeyGenerationParameters kgp = new KeyGenerationParameters(sr, (DESParameters.DES_KEY_LENGTH) * Byte.SIZE);
+		KeyGenerationParameters kgp = 
+				new KeyGenerationParameters(sr, (DESParameters.DES_KEY_LENGTH) * Byte.SIZE);
 
 		DESKeyGenerator kg = new DESKeyGenerator();
 
